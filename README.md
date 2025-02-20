@@ -26,7 +26,19 @@ Ensure you have Python installed on your system. You also need the following lib
 
 ```bash
 pip install numpy opencv-python pywt matplotlib
- 
+```
+## Clone the Repository
+git clone https://github.com/yourusername/ImageFusion-Wavelet
+cd ImageFusion-Wavelet
+
+## Run the Program
+python image_fusion.py
+
+## Conclusion
+This hybrid DWT + SWT approach significantly improves multi-focus image fusion by preserving essential details and reducing distortions. It is a powerful technique for various real-world applications requiring clear and accurate images.
+
+
+
 
 
 
