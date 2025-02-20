@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-focus Image Fusion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #resultCanvas {
+            border: 1px solid black;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Multi-focus Image Fusion using DWT and SWT</h2>
+    <input type="file" id="image1" accept="image/*"> <br>
+    <input type="file" id="image2" accept="image/*"> <br>
+    <button onclick="fuseImages()">Fuse Images</button>
+    <br><br>
+    <canvas id="resultCanvas" width="300" height="300"></canvas>
+
+    <script>
+        const canvas = document.getElementById("resultCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Create two Image objects to store the uploaded images
+        let img1 = new Image();
+        let img2 = new Image();
+
+        function loadImage(fileInput, imgElement) {
+            return new Promise((resolve) => {
+                imgElement.src = URL.createObjectURL(fileInput.files[0]); // Converts file to a temporary URL
+                imgElement.onload = () => resolve(); // Resolves the promise when the image loads
+            });
+        }
+  
+        // Function to fuse two images and display the result on the canvas
+        async function fuseImages() {
+            const fileInput1 = document.getElementById("image1");
+            const fileInput2 = document.getElementById("image2");
+
+            if (!fileInput1.files[0] || !fileInput2.files[0]) {
+                alert("Please select two images.");
+                return;
+            }
+
+            await loadImage(fileInput1, img1);
+            await loadImage(fileInput2, img2);
+
+            ctx.drawImage(img1, 0, 0, canvas.width, canvas.height);
+            const img1Data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            ctx.drawImage(img2, 0, 0, canvas.width, canvas.height);
+            const img2Data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            const fusedData = ctx.createImageData(canvas.width, canvas.height);  // Create an empty ImageData object for storing the fused image
+
+            for (let i = 0; i < img1Data.data.length; i += 4) {
+                fusedData.data[i] = Math.max(img1Data.data[i], img2Data.data[i]);     // Red
+                fusedData.data[i + 1] = Math.max(img1Data.data[i + 1], img2Data.data[i + 1]); // Green
+                fusedData.data[i + 2] = Math.max(img1Data.data[i + 2], img2Data.data[i + 2]); // Blue
+                fusedData.data[i + 3] = 255; // Alpha (fully opaque)
+            }
+
+            ctx.putImageData(fusedData, 0, 0); // Draw the fused image onto the canvas
+        }
+    </script>
+</body>
+</html>
