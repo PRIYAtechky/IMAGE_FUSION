@@ -42,6 +42,11 @@ python image_fusion.py
 This hybrid DWT + SWT approach significantly improves multi-focus image fusion by preserving essential details and reducing distortions. It is a powerful technique for various real-world applications requiring clear and accurate images.
 
 
+## ⭐ Give a Star!  
+If you like this project, feel free to ⭐ the repo.  
+Your support motivates me to build more projects!
+
+
 
 
 
